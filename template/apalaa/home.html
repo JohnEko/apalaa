@@ -1,8 +1,25 @@
 {% extends 'main.html'%}
 
-<br>
-{% block content %}
+{% block content%}
+        <h1>Home Templates</h1>
 
-<h1>Home Templates</h1>
+        <div>
+            {# loop through the name tag and get the url name create #}
+            <a href="{% url 'create' %}">Create Post</a>
+            <div>
+            
+                {% for news in news%}
+                <div>
+                    <h4>{{news.id}} -- <a href="{% url 'news' news.id%}">{{news.name}}</a></h4>
+                </div>
+                {% endfor %}
 
-{% endblock %}
+
+            </div>
+
+
+
+        </div>
+
+{% endblock content %}
+

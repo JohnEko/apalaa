@@ -10,6 +10,10 @@ def home(request):
 
 
 def news(request, pk):
-    frist_post = Post.objects.get(id=pk)
-    context = {"first_post" : frist_post}
+    post = Post.objects.get(id=pk)
+    context = {"post" : post}
     return render(request, 'news.html', context=context)
+
+def createPost(request):
+    context = {}
+    return render(request, "apalaa/post_form.html", context)
