@@ -1,3 +1,26 @@
+{% extends "main.html" %}
 
 
+{% block content %}
 <h1>News Templates</h1>
+
+
+<div>
+    <div>
+        
+        {% for news in news %}
+        <div>
+            <span>@{{news.category.name}}</span>
+            <h4>{{news.id}} -- <a href="{% url 'news' news.id %}">{{news.title}}</a></h4>
+        </div>
+        {% endfor %}
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}
