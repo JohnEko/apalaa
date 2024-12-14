@@ -8,9 +8,12 @@
             <a href="{% url 'create' %}">Create Post</a>
             <div>
             
-                {% for news in news%}
+                {% for info in news %}
+                <a href="{% url 'update' news.id%}"></a>
                 <div>
-                    <h4>{{news.id}} -- <a href="{% url 'news' news.id%}">{{news.name}}</a></h4>
+                    <span>@{{infor.name}}</span>
+                    <h4>{{info.id}} -- <a href="{% url 'info' news.id%}">{{news.name}}</a></h4>
+                    <small>{{info.author.title}}</small>
                 </div>
                 {% endfor %}
 
