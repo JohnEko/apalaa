@@ -24,8 +24,13 @@ def createPost(request):
     context = {'form': form}
     return render(request, "apalaa/post_form.html", context)
 
-def updatePost(request, id):
-    news = Post.objects.get(pk=id)
-    form =PostForm(initial=news)
+def updatePost(request, pk):
+    update_news = Post.objects.get(id=pk)
+    form =PostForm(instance=update_news)
+    if request.method == 'Post':
+        form = PostForm(request.POST, instance=update_news)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
     context = {'form' : form}
-    return render(request, 'apalaa/home.html', context)
+    return render(request, 'apalaa/post_form.html', context)
