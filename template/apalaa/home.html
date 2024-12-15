@@ -1,28 +1,32 @@
 {% extends 'main.html'%}
 
 {% block content%}
-        <h1>Home Templates</h1>
+
+    <h1>Home Templates</h1>
+        <p>This is my home page</p>
+        
 
         <div>
+            <!-- Create new post to the blog -->
+            <a href="{% url 'create' %}">Create</a>
             {# loop through the name tag and get the url name create #}
-            <a href="{% url 'create' %}">Create Post</a>
-            <div>
             
-                {% for info in news %}
-                <a href="{% url 'update' news.id%}"></a>
+            <div>
+                 {% for post_detail in post_details %}
+                <a href="{% url 'update' post_detail.id %}">Edith</a>
                 <div>
-                    <span>@{{infor.name}}</span>
-                    <h4>{{info.id}} -- <a href="{% url 'info' news.id%}">{{news.name}}</a></h4>
-                    <small>{{info.author.title}}</small>
+                    <span>@{{post_detail.author.title}}</span>
+                    <h4>{{post_detail.title}} -- <a href="{% url 'news' post_detail.id%}">{{post_detail.id}}</a></h4>
+                    <small>{{post_detail.author.title}}</small>
                 </div>
-                {% endfor %}
+                {% endfor %} 
 
 
             </div>
 
 
 
-        </div>
+        </div>  
 
 {% endblock content %}
 

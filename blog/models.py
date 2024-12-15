@@ -20,6 +20,7 @@ class Post(models.Model):
 #this will make the newly posted article to appear first
     class Meta:
         ordering = ['-updated_at', 'created_at']
+        
     def __str__(self):
         return self.title
 
