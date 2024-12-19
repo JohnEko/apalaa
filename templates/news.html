@@ -4,13 +4,13 @@
 {% block content %}
 <h1>News Templates</h1>
 
-<p>This is my home page</p>
+<p>This is my News Room</p>
 <div>
     <div>
         
         {% for news in news %}
         <div>
-            <p>waoo</p>
+            <p></p>
             <span>@{{news.category.name}}</span>
             <h4>{{news.id}} -- <a href="{% url 'news' news.id %}">{{news.title}}</a></h4>
         </div>
