@@ -5,8 +5,12 @@ from .forms import PostForm
 # Create your views here.
 
 def home(request):
-    post_details = Post.objects.all()
-    context ={"post_details" : post_details}
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+
+    post_details = Post.objects.filter(title__icontains=q)
+    user_comments = Comment.objects.all()
+    context ={"post_details" : post_details,
+              "user_comments" : user_comments}
     return render(request, 'apalaa/home.html', context=context)
 
 
@@ -35,3 +39,14 @@ def updatePost(request, pk):
             return redirect('home')
     context = {'form' : form}
     return render(request, 'apalaa/post_form.html', context)
+
+
+def deletePost(request, pk):
+    delete_post = Post.objects.get(id=pk)
+
+    if request.method == "POST":
+        delete_post.delete()
+        return redirect('home')
+
+    context = {'obj' : delete_post}
+    return render(request, "apalaa/delete.html", context)
