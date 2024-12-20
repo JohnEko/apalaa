@@ -2,33 +2,61 @@
 
 {% block content%}
 
-    <h1>Home Templates</h1>
-        <p>This is my home page</p>
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+
+</style>
+
+
+
+
+<div class="home-container">
+
+    <div>
+        <h2>Browse News</h2>
+    <hr>
+    <div>
+       <a href="{% url 'home' %}">All</a>
+    </div>
+        <!-- searching for the user who posted the news   -->
+    {% for user in user_comments%}
+    <div>
+        <a href="{% url 'home' %}?q={{user.user}}">{{user.user}}</a>
+    </div>
+    {% endfor %}
+</div>
+
+<div>
+  <!-- Create new post to the blog -->
+  <a href="{% url 'create' %}">Create</a>
+  {# loop through the name tag and get the url name create #}
+  
+  <div>
+       {% for post_detail in post_details %}
+      <a href="{% url 'update' post_detail.id %}">Edith</a>
+      <div>
+          <span>@{{post_detail.title}}</span>
+
+          <h4>{{post_detail.author}} -- <a href="{% url 'news' post_detail.id%}">{{post_detail.id}}</a></h4>
+          <small>{{post_detail.content}}</small>
+          <a href="{% url 'delete' post_detail.id %}">Delete</a>
+          
+      </div>
+      {% endfor %} 
+
+
+  </div>
+
+
+</div>
+
+  
         
 
-        <div>
-            <!-- Create new post to the blog -->
-            <a href="{% url 'create' %}">Create</a>
-            {# loop through the name tag and get the url name create #}
-            
-            <div>
-                 {% for post_detail in post_details %}
-                <a href="{% url 'update' post_detail.id %}">Edith</a>
-                <div>
-                    <span>@{{post_detail.title}}</span>
-
-                    <h4>{{post_detail.author}} -- <a href="{% url 'news' post_detail.id%}">{{post_detail.id}}</a></h4>
-                    <small>{{post_detail.content}}</small>
-                    
-                </div>
-                {% endfor %} 
-
-
-            </div>
-
-
-
-        </div>  
+</div>  
 
 {% endblock content %}
 
