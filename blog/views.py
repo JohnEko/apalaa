@@ -1,16 +1,32 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from .models import Category, Comment, Post
 from .forms import PostForm
 
+"""
+The first view function is to get all the user and again we using filter yo filter user
+The second function is to be a specific user with the news detail
+The other is to post new updated news from user
+This is to check if user can update is comments or post
+This to help user to deletes is post 
+
+"""
 # Create your views here.
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
-    post_details = Post.objects.filter(title__icontains=q)
+    post_details = Post.objects.filter(
+        Q(title__icontains=q) |
+        Q(created_at__icontains=q) |
+        Q(content__icontains=q) 
+        )
     user_comments = Comment.objects.all()
+    post_count = post_details.count() #count the number of post in the blog
     context ={"post_details" : post_details,
-              "user_comments" : user_comments}
+              "user_comments" : user_comments,
+              "post_count" : post_count
+              }
     return render(request, 'apalaa/home.html', context=context)
 
 
