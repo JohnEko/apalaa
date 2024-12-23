@@ -11,25 +11,26 @@
 </style>
 
 
-
-
 <div class="home-container">
 
     <div>
         <h2>Browse News</h2>
     <hr>
     <div>
+        <!-- This will help us to get all the user value and comments on the homepage   -->
        <a href="{% url 'home' %}">All</a>
     </div>
         <!-- searching for the user who posted the news   -->
     {% for user in user_comments%}
     <div>
-        <a href="{% url 'home' %}?q={{user.user}}">{{user.user}}</a>
+        <!-- this will get a specific user post send by the user to the homepage and get the user post -->
+        <a href="{% url 'home' %}?q={{user.post}}">{{user.user}}</a>
     </div>
     {% endfor %}
 </div>
 
 <div>
+    <h4>{{post_count}} Posted </h4>
   <!-- Create new post to the blog -->
   <a href="{% url 'create' %}">Create</a>
   {# loop through the name tag and get the url name create #}

@@ -1,3 +1,8 @@
 
-<h1></h1><a href="{% url 'home' %}">Apalaa</a></h1>
+<h1></h1><a href="/">Apalaa</a></h1>
+
+<!-- Creating a search form to enable user to search title -->
+<form method='GET' action="{% url 'home' %}">
+    <input type="text" name="q"  placeholder="Search Title"/>
+</form>
 <hr>
