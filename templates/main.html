@@ -17,9 +17,24 @@
 </head>
 
 <body>
+  <!-- using flash messages from  -->
     {% include 'navbar.html' %}
+    {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li></li> {{message}}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
         {% block content %}
 
         {% endblock %}
+
+         <!-- This is Basic Dark Fotter -->
+  <footer id="sticky-footer" class="flex-shrink-0 py-2 bg-dark text-white-50">
+    <div class="container text-center">
+      <small id='footerText'>Copyright &copy;2025 &nbsp; Gossip Update</small>
+    </div>
+  </footer>
 
 </body>

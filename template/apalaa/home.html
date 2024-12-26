@@ -30,6 +30,7 @@
 </div>
 
 <div>
+    <!-- Count the number of post in the blog -->
     <h4>{{post_count}} Posted </h4>
   <!-- Create new post to the blog -->
   <a href="{% url 'create' %}">Create</a>
@@ -44,6 +45,7 @@
           <h4>{{post_detail.author}} -- <a href="{% url 'news' post_detail.id%}">{{post_detail.id}}</a></h4>
           <small>{{post_detail.content}}</small>
           <a href="{% url 'delete' post_detail.id %}">Delete</a>
+          <hr>
           
       </div>
       {% endfor %} 

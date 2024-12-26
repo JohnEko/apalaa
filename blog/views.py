@@ -1,6 +1,12 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
 from .models import Category, Comment, Post
+from django.contrib.auth.models import User
+
 from .forms import PostForm
 
 """
@@ -12,6 +18,33 @@ This to help user to deletes is post
 
 """
 # Create your views here.
+
+def loginPage(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+           
+        except:
+            messages.error(request, 'User dose not exist')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'User name and Password dose not exist')
+
+    context = {}
+    return render(request, 'apalaa/login_register.html', context)
+
+
+def logoutUser(request):
+    logout(request)
+    return redirect('home')
+
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
@@ -35,6 +68,9 @@ def news(request, pk):
     context = {"post" : post}
     return render(request, 'news.html', context=context)
 
+
+#We direct the user to our login page if users want to see some pages
+@login_required(login_url='/login')
 def createPost(request):
     form = PostForm()
     if request.method == 'POST':
@@ -45,9 +81,16 @@ def createPost(request):
     context = {'form': form}
     return render(request, "apalaa/post_form.html", context)
 
+# Giving permission to users
+@login_required(login_url='/login')
 def updatePost(request, pk):
     update_post = Post.objects.get(id=pk)
     form = PostForm(instance=update_post)
+
+    #restrict other users from delecting someone post if they are not the owner of the post
+    if request.user != update_post:
+        return HttpResponse('You are not allowed to edith or delect this post')
+
     if request.method == 'POST':
         form = PostForm(request.POST, instance=update_post)
         if form.is_valid():
@@ -57,8 +100,14 @@ def updatePost(request, pk):
     return render(request, 'apalaa/post_form.html', context)
 
 
+# Giving login users permission permission to users
+@login_required(login_url='/login')
 def deletePost(request, pk):
     delete_post = Post.objects.get(id=pk)
+
+    if request.user != delete_post:
+        return HttpResponse('You are not allowed to edith or delect this post')
+
 
     if request.method == "POST":
         delete_post.delete()
