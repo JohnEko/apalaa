@@ -2,9 +2,38 @@
 
 
 {% block content %}
-<h1>News Templates</h1>
+<!-- Getting user with there pose and showing the time stamp they posted the post_message
+Also people can comment on user post -->
+<h1>{{post.category.name}}</h1>
 
-<p>This is my News Room</p>
+<p>{{post.content}}</p>
+
+<div class="comment-wrapper">
+    <h3>Comments</h3>
+    <hr>
+
+    {% for post_message in post_messages %}
+    <div>
+        <!-- showing since the time the message was posted -->
+        <small>@{{post_message.user}} {{post_message.created_at  | timesince }} ago</small>
+        <p>{{post_message.content}}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="comment-form">
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="body" placeholder="Contribute your comments here"/>
+        <input type="submit"  value="Submit" />
+    </form>
+
+
+
+</div>
+
+
+
 <div>
     <div>
         

@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
 from .models import Category, Comment, Post
 from django.contrib.auth.models import User
 
@@ -20,6 +21,10 @@ This to help user to deletes is post
 # Create your views here.
 
 def loginPage(request):
+    page = 'loginPage'
+    #if am login i should not be allowed to be on login oage
+    if request.user.is_authenticated:
+        return redirect('home')
 
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -37,7 +42,7 @@ def loginPage(request):
         else:
             messages.error(request, 'User name and Password dose not exist')
 
-    context = {}
+    context = {'page': page}
     return render(request, 'apalaa/login_register.html', context)
 
 
@@ -45,7 +50,25 @@ def logoutUser(request):
     logout(request)
     return redirect('home')
 
+def registerUser(request):
+    form = UserCreationForm()
 
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user =form.save(commit=False) #help to set the details to automatic lower case
+            user.username = user.username.lower()
+            user.save()
+            login(request, user) #logging the user that just registered
+            return redirect('home')
+        else:
+            messages.error(request, 'error occur during registration')
+
+
+    context = {'form' : form}
+    return render(request, 'apalaa/login_register.html', context)
+
+#we can also add the number of visited users everyday
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
@@ -63,9 +86,18 @@ def home(request):
     return render(request, 'apalaa/home.html', context=context)
 
 
+"""
+ # this takes the messades from the model and set everything 
+ # here never mind if its cap letter it turns it to lower case
+ Most recent message order by
+"""
+
 def news(request, pk):
     post = Post.objects.get(id=pk)
-    context = {"post" : post}
+    post_meassges = Comment.objects.all().order_by('-created_at')
+    context = {"post" : post,
+               'post_messages': post_meassges
+               }
     return render(request, 'news.html', context=context)
 
 
@@ -88,8 +120,8 @@ def updatePost(request, pk):
     form = PostForm(instance=update_post)
 
     #restrict other users from delecting someone post if they are not the owner of the post
-    if request.user != update_post:
-        return HttpResponse('You are not allowed to edith or delect this post')
+    # if request.user != update_post:
+    #     return HttpResponse('You are not allowed to edith or delete this post')
 
     if request.method == 'POST':
         form = PostForm(request.POST, instance=update_post)
@@ -106,7 +138,7 @@ def deletePost(request, pk):
     delete_post = Post.objects.get(id=pk)
 
     if request.user != delete_post:
-        return HttpResponse('You are not allowed to edith or delect this post')
+        return HttpResponse('You are not allowed to edith or delete this post')
 
 
     if request.method == "POST":
