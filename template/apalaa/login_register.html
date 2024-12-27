@@ -2,19 +2,38 @@
 
 
 {% block content %}
-    <div>
-        <form method="POST" action="">
-            {% csrf_token %}
+<!-- 
+building registration and login form if user need to register before login -->
 
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Username" />
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
 
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter Password" />
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Username" />
 
-            <input type="submit" value="Login" />
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter Password" />
 
-        </form>
-    </div>
+        <input type="submit" value="Login" />
+
+    </form>
+    <p>Havent Sign up yet?</p>
+    <a href="{% url 'register' %}">Sign up</a>
+</div>  
+
+
+
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{form.as_p}}
+           
+        <input type="submit" value="Register" />
+
+    </form>
+    <p>Already Sign Up</p>
+    <a href="{% url 'login' %}">Login</a>
+</div>
 
 {% endblock content %}
