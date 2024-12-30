@@ -95,8 +95,22 @@ def home(request):
 def news(request, pk):
     post = Post.objects.get(id=pk)
     post_meassges = Comment.objects.all().order_by('-created_at')
+    participants= post.participants.all() #Bringing all our participant from our models
+    
+    #Creating a post request for user to comments on a post in an article
+    if request.method == 'POST':
+        message = Comment.objects.create(
+            post = post,
+            user=request.user,
+            content=request.POST.get('body')
+        )
+        #We need to process a participant when they are added to a conversation
+        #we can also remove the participant also
+        post.participants.add(request.user)
+        return redirect('news', pk=post.id)
     context = {"post" : post,
-               'post_messages': post_meassges
+               'post_messages': post_meassges,
+               'participants': participants
                }
     return render(request, 'news.html', context=context)
 
@@ -147,3 +161,36 @@ def deletePost(request, pk):
 
     context = {'obj' : delete_post}
     return render(request, "apalaa/delete.html", context)
+
+#Create a function for users to delete there message
+
+@login_required(login_url='/login')
+def deleteComment(request, pk):
+    delete_comment = Comment.objects.get(id=pk)
+
+    if request.user != delete_comment.user:
+        return HttpResponse('You are not allowed to edith or delete this post')
+
+
+    if request.method == "POST":
+        delete_comment.delete()
+        return redirect('home')
+
+    context = {'obj' : delete_comment}
+    return render(request, "apalaa/delete.html", context)
+
+def editComment(request, pk):
+    edit_comment = Comment.objects.get(id=pk)
+    form = PostForm(instance=edit_comment)
+
+    #restrict other users from delecting someone post if they are not the owner of the post
+    # if request.user != update_post:
+    #     return HttpResponse('You are not allowed to edith or delete this post')
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=edit_comment)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    context = {'form' : form}
+    return render(request, 'apalaa/post_form.html', context)
