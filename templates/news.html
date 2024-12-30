@@ -4,53 +4,86 @@
 {% block content %}
 <!-- Getting user with there pose and showing the time stamp they posted the post_message
 Also people can comment on user post -->
-<h1>{{post.category.name}}</h1>
+<style>
+    .news-container{
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
 
-<p>{{post.content}}</p>
+<div class="news-container">
 
-<div class="comment-wrapper">
-    <h3>Comments</h3>
-    <hr>
-
-    {% for post_message in post_messages %}
     <div>
-        <!-- showing since the time the message was posted -->
-        <small>@{{post_message.user}} {{post_message.created_at  | timesince }} ago</small>
-        <p>{{post_message.content}}</p>
-    </div>
-    {% endfor %}
-</div>
 
-<div class="comment-form">
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="text" name="body" placeholder="Contribute your comments here"/>
-        <input type="submit"  value="Submit" />
-    </form>
+        <h1>{{post.category.name}}</h1>
 
+        <p>{{post.content}}</p>
 
+        <div class="comment-wrapper">
+            <h3>Comments</h3>
+            <hr>
 
-</div>
-
-
-
-<div>
-    <div>
-        
-        {% for news in news %}
-        <div>
-            <p></p>
-            <span>@{{news.category.name}}</span>
-            <h4>{{news.id}} -- <a href="{% url 'news' news.id %}">{{news.title}}</a></h4>
+            {% for post_message in post_messages %}
+            <div>
+                <!-- user to delete there comments or edith there comments -->
+                {% if request.user == post_message.user %} 
+                 <a href="{% url 'edit-comment' post_message.id %}">Edit</a>
+                {% endif %}
+                <!-- only the owner can see this comments when deleted -->
+                {% if request.user == post_message.user %}
+                 <a href="{% url 'delete-comment' post_message.id %}">Delete</a>
+                {% endif %}
+                <!-- showing since the time the message was posted -->
+                <small>@{{post_message.user}} {{post_message.created_at  | timesince }} ago</small>
+                <p>{{post_message.content}}</p>
+                <hr>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+
+        {% if request.user.is_authenticated %}
+
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Contribute your comments here"/>
+                <input type="submit"  value="Submit" />
+            </form>
+        </div>
+        {% endif %}
 
 
+        <div>
+            <div>
+                
+                {% for news in news %}
+                <div>
+                    <p></p>
+                    <span>@{{news.category.name}}</span>
+                    <h4>{{news.id}} -- <a href="{% url 'news' news.id %}">{{news.title}}</a></h4>
+                </div>
+                {% endfor %}
+
+
+            </div>
+
+
+
+        </div>
     </div>
 
+    <div>
+        <h3>Participants</h3>
+        <hr>
+        <!-- lets access our Participants in our html page -->
+        {% for user in participants %}
+            <div>
+              <p>@{{user}}</p>
+            </div>
 
+         {% endfor %}
 
+    </div>
 </div>
-
 
 {% endblock content %}
