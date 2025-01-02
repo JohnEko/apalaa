@@ -31,6 +31,12 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+#this will make the newly posted article to appear first
+    class Meta:
+        ordering = ['-created_at']
+#output the first 50 characters
     def __str__(self):
-        return self.content
+        return self.content[0:50]
+    
+    
 # Create your models here.

@@ -79,9 +79,11 @@ def home(request):
         )
     user_comments = Comment.objects.all()
     post_count = post_details.count() #count the number of post in the blog
+    news_comments = Comment.objects.all() #This will help to see people you follow comments
     context ={"post_details" : post_details,
               "user_comments" : user_comments,
-              "post_count" : post_count
+              "post_count" : post_count,
+              "news_comments" : news_comments
               }
     return render(request, 'apalaa/home.html', context=context)
 
