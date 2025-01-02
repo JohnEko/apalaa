@@ -7,7 +7,7 @@ Also people can comment on user post -->
 <style>
     .news-container{
         display: grid;
-        grid-template-columns: 3fr 1fr;
+        grid-template-columns: 4fr 1fr;
     }
 </style>
 
@@ -26,16 +26,18 @@ Also people can comment on user post -->
             {% for post_message in post_messages %}
             <div>
                 <!-- user to delete there comments or edith there comments -->
-                {% if request.user == post_message.user %} 
-                 <a href="{% url 'edit-comment' post_message.id %}">Edit</a>
-                {% endif %}
                 <!-- only the owner can see this comments when deleted -->
-                {% if request.user == post_message.user %}
-                 <a href="{% url 'delete-comment' post_message.id %}">Delete</a>
-                {% endif %}
                 <!-- showing since the time the message was posted -->
                 <small>@{{post_message.user}} {{post_message.created_at  | timesince }} ago</small>
                 <p>{{post_message.content}}</p>
+
+                {% if request.user == post_message.user %} 
+                <a href="{% url 'edit-comment' post_message.id %}">Edit</a>
+               {% endif %}
+               <!-- only the owner can see this comments when deleted -->
+               {% if request.user == post_message.user %}
+                <a href="{% url 'delete-comment' post_message.id %}">Delete</a>
+               {% endif %}
                 <hr>
             </div>
             {% endfor %}

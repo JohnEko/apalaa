@@ -5,7 +5,7 @@
 <style>
     .home-container{
         display: grid;
-        grid-template-columns: 1fr 3fr;
+        grid-template-columns: 1fr 3fr 1fr;
     }
 
 </style>
@@ -61,6 +61,23 @@
 
 </div>
 
+<!-- Creating an activity field for users -->
+<div>
+<h3>Recent Update</h3>
+<hr>
+{% for message in news_comments %}
+<!-- This will show user recent activities base on thier name and time message was posted  -->
+<div>
+    <small>@{{message.user}}  {{message.created_at|timesince}}</small>
+
+    <small>replied to "{{message.post }}"</small>
+
+    <p>{{message}}</p>
+</div>
+
+{% endfor %}
+
+</div>
   
         
 
