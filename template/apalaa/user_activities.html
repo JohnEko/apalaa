@@ -1,0 +1,22 @@
+<h3>Recent Update</h3>
+    <hr>
+    {% for message in news_comments %}
+    <!-- This will show user recent activities base on thier name and time message was posted  -->
+    <div>
+        <small>@{{message.user}}  {{message.created_at|timesince}}</small>
+    
+        <small>replied to "{{message.post }}"</small>
+    
+        <p>{{message}}</p>
+        <!-- Making a user able to delete his own message from the home_page -->
+        {% if request.user == message.user %} 
+        <a href="{% url 'edit-comment' message.id %}">Edit</a>
+        {% endif %}
+    
+        {% if request.user == message.user %}
+        <a href="{% url 'delete-comment' message.id %}">Delete</a>
+        {% endif %}
+        <hr>
+    </div>
+{% endfor %}
+    

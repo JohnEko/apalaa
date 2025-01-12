@@ -79,7 +79,7 @@ def home(request):
         )
     user_comments = Comment.objects.all()
     post_count = post_details.count() #count the number of post in the blog
-    news_comments = Comment.objects.all() #This will help to see people you follow comments
+    news_comments = Comment.objects.filter(Q(content__icontains=q)) #This will help to see people you follow comments
     context ={"post_details" : post_details,
               "user_comments" : user_comments,
               "post_count" : post_count,
@@ -115,6 +115,15 @@ def news(request, pk):
                'participants': participants
                }
     return render(request, 'news.html', context=context)
+
+
+# Let create a user profile for the blog
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+
+    context = {'user': user} 
+    return render(request, 'apalaa/user_profile.html', context)
+
 
 
 #We direct the user to our login page if users want to see some pages

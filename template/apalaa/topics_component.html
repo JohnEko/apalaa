@@ -1,0 +1,13 @@
+<h2>Browse News</h2>
+<hr>
+<div>
+    <!-- This will help us to get all the user value and comments on the homepage   -->
+   <a href="{% url 'home' %}">All</a>
+</div>
+    <!-- searching for the user who posted the news   -->
+{% for user in user_comments%}
+<div>
+    <!-- this will get a specific user post send by the user to the homepage and get the user post -->
+    <a href="{% url 'home' %}?q={{user.post}}">{{user.user}}</a>
+</div>
+{% endfor %}
