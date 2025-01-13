@@ -118,10 +118,13 @@ def news(request, pk):
 
 
 # Let create a user profile for the blog
+# Get a single user profile by there news feeds id
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
-
-    context = {'user': user} 
+    post_details = user.post_set.all() #Check each post by the specific user profile using from the POST MODEL ON VIEWS
+    context = {'user': user,
+               'post_details': post_details
+               } 
     return render(request, 'apalaa/user_profile.html', context)
 
 
