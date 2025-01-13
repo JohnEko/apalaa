@@ -1,19 +1,19 @@
 <div>
     {% for post_detail in post_details %}
    
-   <div>
-       <a href="{ url 'profile' post_detail.title.id}">@{{post_detail.title}}</span>
+        <div>
+            <a href="{% url 'profile' post_detail.author.id %}">@{{post_detail.author}}</span>
 
-       <h4>{{post_detail.author}} -- <a href="{% url 'news' post_detail.id%}">{{post_detail.id}}</a></h4>
-       <small>{{post_detail.content}}</small>
-       <!-- Hide the delete and update if user not host -->
-       
-       <a href="{% url 'update' post_detail.id %}">Edith</a>
-       {% if request.user == postdetail.title %} 
-       <a href="{% url 'delete' post_detail.id %}">Delete</a>
-       {% endif %}
-       <hr>
-       
-   </div>
+            <h4>{{post_detail.author}} -- <a href="{% url 'news' post_detail.id%}">{{post_detail.id}}</a></h4>
+            <small>{{post_detail.content}}</small>
+            <!-- Hide the delete and update if user not host -->
+            
+            <a href="{% url 'update' post_detail.id %}">Edith</a>
+            {% if request.user == postdetail.title %} 
+            <a href="{% url 'delete' post_detail.id %}">Delete</a>
+            {% endif %}
+            <hr>
+            
+        </div>
    {% endfor %} 
 </div>
