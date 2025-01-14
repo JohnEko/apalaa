@@ -75,15 +75,18 @@ def home(request):
     post_details = Post.objects.filter(
         Q(title__icontains=q) |
         Q(created_at__icontains=q) |
-        Q(content__icontains=q) 
+        Q(content__icontains=q) |
+        Q(category__name__icontains=q)
         )
+    category = Category.objects.all()
     user_comments = Comment.objects.all()
     post_count = post_details.count() #count the number of post in the blog
     news_comments = Comment.objects.filter(Q(content__icontains=q)) #This will help to see people you follow comments
     context ={"post_details" : post_details,
               "user_comments" : user_comments,
               "post_count" : post_count,
-              "news_comments" : news_comments
+              "news_comments" : news_comments,
+              "category": category
               }
     return render(request, 'apalaa/home.html', context=context)
 
@@ -122,9 +125,15 @@ def news(request, pk):
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     post_details = user.post_set.all() #Check each post by the specific user profile using from the POST MODEL ON VIEWS
+    news_comments = user.comment_set.all()#Check each post by the specific user profile using from the POST MODEL ON VIEWS
+    user_comments = Comment.objects.all() # Can also get all the user comments
+    category = Category.objects.all()
     context = {'user': user,
-               'post_details': post_details
-               } 
+               'post_details': post_details,
+               'news_comments' : news_comments,
+               'comments': user_comments, 
+               'category' : category
+              } 
     return render(request, 'apalaa/user_profile.html', context)
 
 
