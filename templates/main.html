@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -13,7 +14,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
 
 <!-- Local CSS -->
-<!-- <link rel="stylesheet" href="style.css" />   -->
+<link rel="stylesheet" type='text/css' media='screen'  href="{% static 'styles/main.css' %}" />  
 </head>
 
 <body>
@@ -22,10 +23,12 @@
     {% if messages %}
     <ul class="messages">
       {% for message in messages %}
-        <li></li> {{message}}</li>
+        <li>{{message}}</li>
       {% endfor %}
     </ul>
     {% endif %}
+
+   
         {% block content %}
 
         {% endblock %}
@@ -33,7 +36,7 @@
          <!-- This is Basic Dark Fotter -->
   <footer id="sticky-footer" class="flex-shrink-0 py-2 bg-dark text-white-50">
     <div class="container text-center">
-      <small id='footerText'>Copyright &copy;2025 &nbsp; Gossip Update</small>
+      <small id='footerText'><a href="{% url 'home' %}">Copyright &copy;2025 &nbsp; Gossip Update</a></small>
     </div>
   </footer>
 
