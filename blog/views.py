@@ -145,7 +145,9 @@ def createPost(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.author = request.user #the author will be added when he is login
+            post.save()
             return redirect('home')
     context = {'form': form}
     return render(request, "apalaa/post_form.html", context)

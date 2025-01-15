@@ -3,7 +3,7 @@
     {% for message in news_comments %}
     <!-- This will show user recent activities base on thier name and time message was posted  -->
     <div>
-        <small>@{{message.user}}  {{message.created_at|timesince}}</small>
+        <small><a href="{% url 'profile' message.user.id %}">@{{message.user}}</a>  {{message.created_at|timesince}}</small>
     
         <small>replied to "{{message.post }}"</small>
     
