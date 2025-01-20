@@ -1,0 +1,39 @@
+{% extends 'main.html'%}
+
+{% block content%}
+
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+
+</style>
+<div class="home-container">
+
+    <div>
+      {% include 'apalaa/topics_component.html'%}
+    </div>
+
+      <div>
+          <!-- Count the number of post in the blog -->
+          <h4>{{post_count}} Posted </h4>
+        <!-- Create new post to the blog -->
+        <a href="{% url 'create' %}">Create</a>
+        {# loop through the name tag and get the url name create #}
+        
+        {% include 'apalaa/feed_component.html'%}
+
+      </div>
+
+<!-- Creating an activity field for users -->
+<div>
+{% include 'apalaa/user_activities.html'%}
+</div>
+  
+        
+
+</div>  
+
+{% endblock content %}
+

@@ -1,18 +1,30 @@
-<h2>Browse News</h2>
-<hr>
-<div>
-        <div>
-            <!-- This will help us to get back to the main page   -->
-        <a href="{% url 'home' %}">All</a>
-        </div>
-            <!-- searching for the user who posted the news   -->
-        
-        </div>
-        {% for user in category %}
+<div class="topics">
+    <div class="topics__header">
+      <h2>Browse News</h2>
+    </div>
+    <ul class="topics__list">
+      <li>
+        <!-- Get the list of topics in the home page -->
+         <!-- Updated the count on all user -->
+        <a href="{% url 'home' %}" class="active">Home <span>{{category.count}}</span></a>
+      </li>
 
-        <div>
-            
-            <!-- this will get a specific user post send by the user to the homepage and get the user post -->
-            <a href="{% url 'home' %}?q={{user.name}}">{{user.name}}</a>
-        </div>
-{% endfor %}
+      {% for user in category %}
+      <li>
+        <!-- Updated the count on each user -->
+         <!-- this will get each post on a specific topics send by the user to the homepage and get the user post -->
+        <a href="{% url 'home' %}?q={{user.name}}">{{user.name}}<span>{{user.post_set.all.count}}</span></a>
+      </li>
+
+      {% endfor %}
+      
+    </ul>
+    <a class="btn btn--link" href="topics.html">
+      More
+      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+        <title>chevron-down</title>
+        <path d="M16 21l-13-13h-3l16 16 16-16h-3l-13 13z"></path>
+      </svg>
+    </a>
+  </div>
+
