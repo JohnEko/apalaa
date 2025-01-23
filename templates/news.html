@@ -18,12 +18,13 @@
                   ></path>
                 </svg>
               </a>
-              <h3>News Gist</h3>
+              <h3><a href="{% url 'home' %}">News Gist</a></h3>
             </div>
 
             <!-- lets create an if statement so only the user 
              can delete or update is post -->
-             {% if post.author == request.user%}
+             
+             {% if post.author == request.user %}
             <div class="room__topRight">
               <a href="{% url 'update' post.id %}">
                 <svg
@@ -51,7 +52,7 @@
                   </g>
                 </svg>
               </a>
-              <a href="{% url 'delete-comment' post.id %}">
+              <a href="{% url 'delete' post.id %}">
                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                   <title>remove</title>
                   <path
@@ -60,6 +61,7 @@
                 </svg>
               </a>
             </div>
+
             {% endif %}
             <!-- <button class="action-button" data-id="120" data-delete-url="https://randomuser.me/api/3324923"
             data-edit-url="profile.html">
@@ -82,7 +84,7 @@
               <div class="room__info">
                 <!-- lets modify the author name and when 
                  the post was created -->
-                <h3>{{post.author}}</h3>
+                <h3>{{post.title}}</h3>
                 <span>{{post.created_at|timesince}}</span>
               </div>
               <div class="room__hosted">
@@ -99,8 +101,8 @@
                 rerum consectetur, voluptatem repudiandae eum ea porro cupiditate provident nulla, deserunt, ab ipsum
                 corporis laboriosam deleniti molestias?
               </div> -->
-              <!-- Get the news category or topic name you are on -->
-              <span class="room__topics">{{post.category}}</span>
+              <!-- Get the news title or topic from th you are on -->
+              <span class="room__topics">{{post.title}}</span>
             </div>
 
             <!-- Here is the content of the news that user read -->
@@ -108,13 +110,15 @@
               <div class="threads scroll">
 
                 <!-- lets delete the threads and use forloop
-                  to loop through all threads -->
+                  to loop through all threads in the comments section on any topic -->
                 {% for post_message in post_messages %}
                 <div class="thread">
                   <div class="thread__top">
                     <div class="thread__author">
 
-                      <!-- lets update the content of the threads -->
+                      <!-- lets update the content of the threads
+                       if a participant want to update there content 
+                       they can on the thread or comment -->
                       <a href="{% url 'profile' post_message.user.id %}" class="thread__authorInfo">
                         <div class="avatar avatar--small">
                           <img src="https://randomuser.me/api/portraits/men/37.jpg" />
@@ -123,13 +127,14 @@
                         <!-- output each user with there username -->
                         <span>@{{post_message.user.username}}</span>
                       </a>
+                      <!-- The time stamp the message was created  -->
                       <span class="thread__date">{{post_message.created_at | timesince}}</span>
                     </div>
                     
                     <!-- want to condition only right user 
-                     can delete his message -->
+                     can delete his comments on the thread  -->
                      {% if request.user == post_message.user %}
-                     <a href="{% url 'delete' post_message.id %}">
+                     <a href="{% url 'delete-comment' post_message.id %}">
                     <div class="thread__delete">
                       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                         <title>remove</title>
@@ -166,12 +171,13 @@
           <div class="participants__list scroll">
 
             {% for user in participants %}
-            <!-- loop through each participant  -->
+            <!-- loop through each participant comments from there user profile  -->
             <a href="{% url 'profile' user.id %}" class="participant">
               <div class="avatar avatar--medium">
                 <img src="https://randomuser.me/api/portraits/men/37.jpg" />
               </div>
               <p>
+                <!-- Get each participant username -->
                 {{user.username}}
                 <span>@{{user.username}}</span>
               </p>

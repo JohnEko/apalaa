@@ -1,3 +1,5 @@
+
+<!-- This will loop through each post posted in the home page -->
 {% for post_detail in post_details %}
 
 <div class="roomListRoom">
@@ -6,14 +8,17 @@
         <div class="avatar avatar--small">
           <img src="https://randomuser.me/api/portraits/women/11.jpg" />
         </div>
+        <!-- Get the user name of the host/author who post the topic -->
         <span>@{{post_detail.author.username}}</span>
       </a>
+      <!-- Get the time the post was made  -->
       <div class="roomListRoom__actions">
         <span>{{post_detail.created_at|timesince}}</span>
       </div>
     </div>
     <div class="roomListRoom__content">
-      <a href="{% url 'news' post_detail.id%}">{{post_detail.author}}</a>
+      <!-- Get the title of the topic posted from the backend -->
+      <a href="{% url 'news' post_detail.id%}">{{post_detail.title}}</a>
       
     </div>
     <div class="roomListRoom__meta">

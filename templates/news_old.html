@@ -34,7 +34,7 @@ Also people can comment on user post -->
 
                 {% if request.user == post_message.user %} 
                 <a href="{% url 'edit-comment' post_message.id %}">Edit</a>
-               {% endif %}
+                
                <!-- only the owner can see this comments when deleted -->
                {% if request.user == post_message.user %}
                 <a href="{% url 'delete-comment' post_message.id %}">Delete</a>
@@ -44,6 +44,7 @@ Also people can comment on user post -->
             {% endfor %}
         </div>
 
+       <!-- Checking if the user is an authentication user  -->
         {% if request.user.is_authenticated %}
 
         <div class="comment-form">
