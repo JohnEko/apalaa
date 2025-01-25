@@ -22,6 +22,7 @@
           <!-- The form value action should be same url and method post -->
           <form class="form" action="" method="POST">
             {% csrf_token %}
+            <!-- This methos helps us to add new topic on the navbar -->   
             <!-- lets create a loop around the form group -->
              {%for fields in form%}
             <div class="form__group">
@@ -31,7 +32,8 @@
               <!-- <input id="room_name" name="room_name" type="text" placeholder="E.g. Mastering Python + Django" /> -->
             </div>
             {% endfor %}
-<!-- 
+<!-- we can also use this below html code 
+ to allow the user to add any fields
             <div class="form__group">
               <label for="room_topic">Topic</label>
               <input required type="text" name="topic" id="room_topic" list="topic-list" />
@@ -49,7 +51,7 @@
          
             <div class="form__action">
               <a class="btn btn--dark" href="index.html">Cancel</a>
-              <button class="btn btn--main" type="submit">Create Room</button>
+              <button class="btn btn--main" type="submit">Submit</button>
             </div>
           </form>
         </div>

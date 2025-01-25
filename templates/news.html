@@ -103,13 +103,17 @@
               </div> -->
               <!-- Get the news title or topic from th you are on -->
               <span class="room__topics">{{post.title}}</span>
+              <hr>
+              <!-- we can also allow the user to see our content
+                from our page and comments further -->
+              <span class="room__topics">{{post.content}}</span>
             </div>
 
             <!-- Here is the content of the news that user read -->
             <div class="room__conversation">
               <div class="threads scroll">
 
-                <!-- lets delete the threads and use forloop
+                <!-- lets delete the threads/comments and use forloop
                   to loop through all threads in the comments section on any topic -->
                 {% for post_message in post_messages %}
                 <div class="thread">
