@@ -227,7 +227,7 @@ def editComment(request, pk):
 
 
 # We dont need an id because the user going to be a login user 
-# can use it from the navbar section
+# can use it from the navbar section and redirect back to his profile
 @login_required(login_url='/login')
 def updateUser(request):
     user=request.user
