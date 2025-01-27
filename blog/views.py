@@ -78,7 +78,8 @@ def home(request):
         Q(content__icontains=q) |
         Q(category__name__icontains=q)
         )
-    category = Category.objects.all()
+    # we can limit the number of category or topic we want user to see with the list[0:4]
+    category = Category.objects.all()[0:3]
     user_comments = Comment.objects.all()
     post_count = post_details.count() #count the number of post in the blog
     news_comments = Comment.objects.filter(Q(content__icontains=q)) #This will help to see people you follow comments
@@ -241,3 +242,23 @@ def updateUser(request):
 
     context = {'form': form}
     return render(request, 'apalaa/update_user.html', context)
+
+
+def topicsView(request):
+# queryset to help us search for new category
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Category.objects.filter(name__icontains=q)
+
+    context = {'topics':topics}
+
+    return render(request, "apalaa/topics.html", context)
+
+
+# lets create a view for our user activities 
+
+def activityView(request):
+    news_comments = Comment.objects.all()
+
+    context = {'news_comments': news_comments}
+
+    return render(request, "apalaa/activity.html", context)
