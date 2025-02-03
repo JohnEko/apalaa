@@ -1,0 +1,93 @@
+{% extends "main.html" %}
+
+
+{% block content %}
+<!-- Getting user with there pose and showing the time stamp they posted the post_message
+Also people can comment on user post -->
+<style>
+    .news-container{
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+    }
+</style>
+
+<div class="news-container">
+
+    <div>
+
+        <h1>{{post.category.name}}</h1>
+
+        <p>{{post.content}}</p>
+
+        <div class="comment-wrapper">
+            <h3>Comments</h3>
+            <hr>
+
+            {% for post_message in post_messages %}
+            <div>
+                <!-- user to delete there comments or edith there comments -->
+                <!-- only the owner can see this comments when deleted -->
+                <!-- showing since the time the message was posted -->
+                 
+                <small>@{{post_message.user}} {{post_message.created_at  | timesince }} ago</small>
+                <p>{{post_message.content}}</p>
+
+                {% if request.user == post_message.user %} 
+                <a href="{% url 'edit-comment' post_message.id %}">Edit</a>
+                
+               <!-- only the owner can see this comments when deleted -->
+               {% if request.user == post_message.user %}
+                <a href="{% url 'delete-comment' post_message.id %}">Delete</a>
+               {% endif %}
+                <hr>
+            </div>
+            {% endfor %}
+        </div>
+
+       <!-- Checking if the user is an authentication user  -->
+        {% if request.user.is_authenticated %}
+
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="Contribute your comments here"/>
+                <input type="submit"  value="Submit" />
+            </form>
+        </div>
+        {% endif %}
+
+
+        <div>
+            <div>
+                
+                {% for news in news %}
+                <div>
+                    <p></p>
+                    <span>@{{news.category.name}}</span>
+                    <h4>{{news.id}} -- <a href="{% url 'news' news.id %}">{{news.title}}</a></h4>
+                </div>
+                {% endfor %}
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <div>
+        <h3>Participants</h3>
+        <hr>
+        <!-- lets access our Participants in our html page -->
+        {% for user in participants %}
+            <div>
+              <p>@{{user}}</p>
+            </div>
+
+         {% endfor %}
+
+    </div>
+</div>
+
+{% endblock content %}

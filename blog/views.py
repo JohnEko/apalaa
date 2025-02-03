@@ -8,7 +8,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import Category, Comment, Post
 from django.contrib.auth.models import User
 
-from .forms import PostForm
+from .forms import PostForm, UserForm
 
 """
 The first view function is to get all the user and again we using filter yo filter user
@@ -78,7 +78,8 @@ def home(request):
         Q(content__icontains=q) |
         Q(category__name__icontains=q)
         )
-    category = Category.objects.all()
+    # we can limit the number of category or topic we want user to see with the list[0:4]
+    category = Category.objects.all()[0:3]
     user_comments = Comment.objects.all()
     post_count = post_details.count() #count the number of post in the blog
     news_comments = Comment.objects.filter(Q(content__icontains=q)) #This will help to see people you follow comments
@@ -142,6 +143,8 @@ def userProfile(request, pk):
 @login_required(login_url='/login')
 def createPost(request):
     form = PostForm()
+    # we need to make our form dynamic then go into post_form to loop through all categories
+    categorys = Category.objects.all()
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -149,13 +152,15 @@ def createPost(request):
             post.author = request.user #the author will be added when he is login
             post.save()
             return redirect('home')
-    context = {'form': form}
+    context = {'form': form,
+               'categorys': categorys}
     return render(request, "apalaa/post_form.html", context)
 
 # Giving permission to users
 @login_required(login_url='/login')
 def updatePost(request, pk):
     update_post = Post.objects.get(id=pk)
+    categorys = Category.objects.all()
     form = PostForm(instance=update_post)
 
     #restrict other users from delecting someone post if they are not the owner of the post
@@ -167,7 +172,8 @@ def updatePost(request, pk):
         if form.is_valid():
             form.save()
             return redirect('home')
-    context = {'form' : form}
+    context = {'form' : form,
+               'categorys':categorys}
     return render(request, 'apalaa/post_form.html', context)
 
 
@@ -219,3 +225,40 @@ def editComment(request, pk):
             return redirect('home')
     context = {'form' : form}
     return render(request, 'apalaa/post_form.html', context)
+
+
+# We dont need an id because the user going to be a login user 
+# can use it from the navbar section and redirect back to his profile
+@login_required(login_url='/login')
+def updateUser(request):
+    user=request.user
+    form = UserForm(instance=user)
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', pk=user.id)
+
+
+    context = {'form': form}
+    return render(request, 'apalaa/update_user.html', context)
+
+
+def topicsView(request):
+# queryset to help us search for new category
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Category.objects.filter(name__icontains=q)
+
+    context = {'topics':topics}
+
+    return render(request, "apalaa/topics.html", context)
+
+
+# lets create a view for our user activities 
+
+def activityView(request):
+    news_comments = Comment.objects.all()
+
+    context = {'news_comments': news_comments}
+
+    return render(request, "apalaa/activity.html", context)

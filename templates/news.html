@@ -1,92 +1,200 @@
-{% extends "main.html" %}
-
+{% extends 'main.html' %}
 
 {% block content %}
-<!-- Getting user with there pose and showing the time stamp they posted the post_message
-Also people can comment on user post -->
-<style>
-    .news-container{
-        display: grid;
-        grid-template-columns: 4fr 1fr;
-    }
-</style>
-
-<div class="news-container">
-
-    <div>
-
-        <h1>{{post.category.name}}</h1>
-
-        <p>{{post.content}}</p>
-
-        <div class="comment-wrapper">
-            <h3>Comments</h3>
-            <hr>
-
-            {% for post_message in post_messages %}
-            <div>
-                <!-- user to delete there comments or edith there comments -->
-                <!-- only the owner can see this comments when deleted -->
-                <!-- showing since the time the message was posted -->
-                 
-                <small>@{{post_message.user}} {{post_message.created_at  | timesince }} ago</small>
-                <p>{{post_message.content}}</p>
-
-                {% if request.user == post_message.user %} 
-                <a href="{% url 'edit-comment' post_message.id %}">Edit</a>
-               {% endif %}
-               <!-- only the owner can see this comments when deleted -->
-               {% if request.user == post_message.user %}
-                <a href="{% url 'delete-comment' post_message.id %}">Delete</a>
-               {% endif %}
-                <hr>
+<!-- The news profiles where the user gets all the news -->
+    <main class="profile-page layout layout--2">
+      <div class="container">
+        <!-- Room Start -->
+        <div class="room">
+          <div class="room__top">
+            <div class="room__topLeft">
+              <!-- we can send the user to anypage but for here lets 
+               send back to the homepage -->
+              <a href="{% url 'home' %}">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                  <title>arrow-left</title>
+                  <path
+                    d="M13.723 2.286l-13.723 13.714 13.719 13.714 1.616-1.611-10.96-10.96h27.625v-2.286h-27.625l10.965-10.965-1.616-1.607z"
+                  ></path>
+                </svg>
+              </a>
+              <h3><a href="{% url 'home' %}">News Gist</a></h3>
             </div>
-            {% endfor %}
-        </div>
 
-        {% if request.user.is_authenticated %}
+            <!-- lets create an if statement so only the user 
+             can delete or update is post -->
+             
+             {% if post.author == request.user %}
+            <div class="room__topRight">
+              <a href="{% url 'update' post.id %}">
+                <svg
+                  enable-background="new 0 0 24 24"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  width="32"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <title>edit</title>
+                  <g>
+                    <path d="m23.5 22h-15c-.276 0-.5-.224-.5-.5s.224-.5.5-.5h15c.276 0 .5.224.5.5s-.224.5-.5.5z" />
+                  </g>
+                  <g>
+                    <g>
+                      <path
+                        d="m2.5 22c-.131 0-.259-.052-.354-.146-.123-.123-.173-.3-.133-.468l1.09-4.625c.021-.09.067-.173.133-.239l14.143-14.143c.565-.566 1.554-.566 2.121 0l2.121 2.121c.283.283.439.66.439 1.061s-.156.778-.439 1.061l-14.142 14.141c-.065.066-.148.112-.239.133l-4.625 1.09c-.038.01-.077.014-.115.014zm1.544-4.873-.872 3.7 3.7-.872 14.042-14.041c.095-.095.146-.22.146-.354 0-.133-.052-.259-.146-.354l-2.121-2.121c-.19-.189-.518-.189-.707 0zm3.081 3.283h.01z"
+                      />
+                    </g>
+                    <g>
+                      <path
+                        d="m17.889 10.146c-.128 0-.256-.049-.354-.146l-3.535-3.536c-.195-.195-.195-.512 0-.707s.512-.195.707 0l3.536 3.536c.195.195.195.512 0 .707-.098.098-.226.146-.354.146z"
+                      />
+                    </g>
+                  </g>
+                </svg>
+              </a>
+              <a href="{% url 'delete' post.id %}">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                  <title>remove</title>
+                  <path
+                    d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z"
+                  ></path>
+                </svg>
+              </a>
+            </div>
 
-        <div class="comment-form">
-            <form method="POST" action="">
-                {% csrf_token %}
-                <input type="text" name="body" placeholder="Contribute your comments here"/>
-                <input type="submit"  value="Submit" />
-            </form>
-        </div>
-        {% endif %}
+            {% endif %}
+            <!-- <button class="action-button" data-id="120" data-delete-url="https://randomuser.me/api/3324923"
+            data-edit-url="profile.html">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+              <title>ellipsis-horizontal</title>
+              <path
+                d="M16 7.843c-2.156 0-3.908-1.753-3.908-3.908s1.753-3.908 3.908-3.908c2.156 0 3.908 1.753 3.908 3.908s-1.753 3.908-3.908 3.908zM16 1.98c-1.077 0-1.954 0.877-1.954 1.954s0.877 1.954 1.954 1.954c1.077 0 1.954-0.877 1.954-1.954s-0.877-1.954-1.954-1.954z">
+              </path>
+              <path
+                d="M16 19.908c-2.156 0-3.908-1.753-3.908-3.908s1.753-3.908 3.908-3.908c2.156 0 3.908 1.753 3.908 3.908s-1.753 3.908-3.908 3.908zM16 14.046c-1.077 0-1.954 0.877-1.954 1.954s0.877 1.954 1.954 1.954c1.077 0 1.954-0.877 1.954-1.954s-0.877-1.954-1.954-1.954z">
+              </path>
+              <path
+                d="M16 31.974c-2.156 0-3.908-1.753-3.908-3.908s1.753-3.908 3.908-3.908c2.156 0 3.908 1.753 3.908 3.908s-1.753 3.908-3.908 3.908zM16 26.111c-1.077 0-1.954 0.877-1.954 1.954s0.877 1.954 1.954 1.954c1.077 0 1.954-0.877 1.954-1.954s-0.877-1.954-1.954-1.954z">
+              </path>
+            </svg>
+          </button> -->
+          </div>
+          <div class="room__box scroll">
+            <div class="room__header scroll">
+              <div class="room__info">
+                <!-- lets modify the author name and when 
+                 the post was created -->
+                <h3>{{post.title}}</h3>
+                <span>{{post.created_at|timesince}}</span>
+              </div>
+              <div class="room__hosted">
+                <p>{{post.user}}</p>
+                <a href="{% url 'profile' post.author.id %}" class="room__author">
+                  <div class="avatar avatar--small">
+                    <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+                  </div>
+                  <span>@{{post.author.username}}</span>
+                </a>
+              </div>
+              <!-- <div class="room__details">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi, tenetur laudantium? Dicta repellendus
+                rerum consectetur, voluptatem repudiandae eum ea porro cupiditate provident nulla, deserunt, ab ipsum
+                corporis laboriosam deleniti molestias?
+              </div> -->
+              <!-- Get the news title or topic from th you are on -->
+              <span class="room__topics">{{post.title}}</span>
+              <hr>
+              <!-- we can also allow the user to see our content
+                from our page and comments further -->
+              <span class="room__topics">{{post.content}}</span>
+            </div>
 
+            <!-- Here is the content of the news that user read -->
+            <div class="room__conversation">
+              <div class="threads scroll">
 
-        <div>
-            <div>
-                
-                {% for news in news %}
-                <div>
-                    <p></p>
-                    <span>@{{news.category.name}}</span>
-                    <h4>{{news.id}} -- <a href="{% url 'news' news.id %}">{{news.title}}</a></h4>
+                <!-- lets delete the threads/comments and use forloop
+                  to loop through all threads in the comments section on any topic -->
+                {% for post_message in post_messages %}
+                <div class="thread">
+                  <div class="thread__top">
+                    <div class="thread__author">
+
+                      <!-- lets update the content of the threads
+                       if a participant want to update there content 
+                       they can on the thread or comment -->
+                      <a href="{% url 'profile' post_message.user.id %}" class="thread__authorInfo">
+                        <div class="avatar avatar--small">
+                          <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+                        </div>
+
+                        <!-- output each user with there username -->
+                        <span>@{{post_message.user.username}}</span>
+                      </a>
+                      <!-- The time stamp the message was created  -->
+                      <span class="thread__date">{{post_message.created_at | timesince}}</span>
+                    </div>
+                    
+                    <!-- want to condition only right user 
+                     can delete his comments on the thread  -->
+                     {% if request.user == post_message.user %}
+                     <a href="{% url 'delete-comment' post_message.id %}">
+                    <div class="thread__delete">
+                      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                        <title>remove</title>
+                        <path
+                          d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </a>
+                  {% endif %}
+                  </div>
+
+                  <!-- Get the message content -->
+                  <div class="thread__details">
+                    {{post_message.content}}
+                  </div>
                 </div>
                 {% endfor %}
-
-
+                
+              </div>
             </div>
-
-
-
+          </div>
+          <div class="room__message">
+            <!-- This help os any nav element click we make our comments of the chat -->
+            <form action="#" method="POST">
+              {% csrf_token %}
+              <input name="body" placeholder="Write your message here..." />
+            </form>
+          </div>
         </div>
-    </div>
+        <!-- Room End -->
 
-    <div>
-        <h3>Participants</h3>
-        <hr>
-        <!-- lets access our Participants in our html page -->
-        {% for user in participants %}
-            <div>
-              <p>@{{user}}</p>
-            </div>
+        <!-- lets take the one participant because each 
+         has a link and loop through it -->
+        <!--   Start -->
+        <div class="participants">
+          <h3 class="participants__top">Participants <span>{{participants.count}}</span></h3>
+          <div class="participants__list scroll">
 
-         {% endfor %}
-
-    </div>
-</div>
-
+            {% for user in participants %}
+            <!-- loop through each participant comments from there user profile  -->
+            <a href="{% url 'profile' user.id %}" class="participant">
+              <div class="avatar avatar--medium">
+                <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+              </div>
+              <p>
+                <!-- Get each participant username -->
+                {{user.username}}
+                <span>@{{user.username}}</span>
+              </p>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        <!--  End -->
+      </div>
+    </main>
+    <script src="script.js"></script>
 {% endblock content %}

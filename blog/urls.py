@@ -16,6 +16,11 @@ urlpatterns = [
      path('edit-comment/<str:pk>/', views.editComment, name='edit-comment'),
     path('delete-post/<str:pk>/', views.deletePost, name='delete'),
     path('delete-comment/<str:pk>/', views.deleteComment, name='delete-comment'),
+    path('update-user/', views.updateUser, name='update-user'),
+
+    path('topics/', views.topicsView, name='topics'),
+     path('activity/', views.activityView, name='activity'),
+
 
 
 ]
